@@ -21,6 +21,14 @@
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+  
+
+//window.innerWidth 브라우저 윈도우 두께를 제외한 실질적 가로 길이
+//window.outerWidth 브라우저 윈도우 두께를 포함한 브라우저 전체 가로 길이
+//
+//window.innerHeight  브라우저 윈도우 두께를 제외한 실질적 세로 길이
+//window.outerHeight   브라우저 윈도우 두께를 포함한 브라우저 전체 세로 길이
+        
         const input_color = document.querySelector("#color");
         const input_weight = document.querySelector("#weight");
         const input_clear = document.querySelector("#clear");
