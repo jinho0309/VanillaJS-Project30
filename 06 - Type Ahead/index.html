@@ -1,0 +1,89 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <form class="searh-form">
+        <input type="text" class="search" placeholder="City or State">
+        <ul class="suggestions">
+            <li>Filter for a city</li>
+            <li>or a state</li>
+        </ul>
+
+    </form>
+
+    <script>
+        const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+        const cities = [];
+
+        //fetch(url).then(response).then(data);
+        //res.json() --> data;
+        //push(...data)에서 ...data쓰는 이유는 나눠서 저장되게 해주는 듯
+        
+        fetch(endpoint)
+            .then(function(res) {
+                return res.json();
+            })
+            .then(function(data) {
+
+                cities.push(...data);
+            });
+
+        function findMatches(wordToMatch, cities) {
+            return cities.filter(function(place) {
+                const regex = new RegExp(wordToMatch, 'gi');
+                return place.city.match(regex) || place.state.match(regex);
+            });
+        }
+        //RegExp는 정규 표현식을 만들어줌. g는 global i는 대소문자 무시
+        //filter를 통해 return이 true되는 것만 반환
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function displayMatches() {
+            const value = this.value;
+            const matchArray = findMatches(value, cities);
+            
+            const html = matchArray.map(function(place) {
+                const regex = new RegExp(value, 'gi');
+                const cityName = place.city.replace(regex, "<span class=hl>"+value+"</span>");
+                //repalace는 정규식대로 대체해주는건데
+                //input값과 같은 부분만 class를 hl로 주기위해
+                
+                console.log(place.city);
+                console.log(cityName);
+                const stateName =  place.state.replace(regex, "<span class=hl>"+value+"</span>");
+
+                const str = "<li><span class=name>" + cityName + " ," + stateName + "</span>" + numberWithCommas(place.population) + "<span class=population></span></li>";
+                //matchArray에 있는 Array값들을 map을 통해
+                //하나씩 <li>태그로 감싼다.
+                //나중에 join을 통해 <li></li><li></li>....
+                //위와 같은 문자열을 만들어서 innerHtml한다.
+                
+                return str;
+            }).join('');
+
+            suggestions.innerHTML = html;
+        }
+        //=============Arr.join==========================        
+        //var a = ['바람', '비', '불'];
+        //var myVar1 = a.join();      myVar1에 '바람,비,불'을 대입
+        //var myVar2 = a.join(', ');  myVar2에 '바람, 비, 불'을 대입
+        //var myVar3 = a.join(' + '); myVar3에 '바람 + 비 + 불'을 대입
+        //var myVar4 = a.join('');    myVar4에 '바람비불'을 대입
+        //========================================        
+        const searchInput = document.querySelector('.search');
+        const suggestions = document.querySelector('.suggestions');
+
+        searchInput.addEventListener('change', displayMatches);
+        searchInput.addEventListener('keyup', displayMatches);
+    </script>
+</body>
+</html>
