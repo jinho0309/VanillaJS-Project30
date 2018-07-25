@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background:mistyrose;
+  }
+
+  .three {
+    background:coral;
+  }
+</style>
+
+<button></button>
+<script>
+    const divs = document.querySelectorAll('div');
+    const button = document.querySelector('button');
+    
+    function logText(e) {
+        console.log(this.classList.value);
+        e.stopPropagation();
+        //Its mean is stop event propagation(전파), stop bubbling!!
+    }
+    
+//    divs.forEach(function(div){
+//        div.addEventListener('click',logText);
+//    });
+    //=============EventBubbling============================
+    //When we click the div.three, We can see "three two one"
+    //Bottom to Top
+        divs.forEach(function(div){
+        div.addEventListener('click',logText,{capture : true});
+    });
+    //============EventCapturing==========================
+    //When we click the div.three, We can see "one two three"
+    //Top to Bottom
+    
+    button.addEventListener('click',function(){
+        console.log('Click!!!');
+    },{once :true});
+    //Just one time execute
+    
+</script>
+</body>
+</html>
