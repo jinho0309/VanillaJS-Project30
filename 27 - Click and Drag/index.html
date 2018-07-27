@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="items">
+        <div class="item item1">01</div>
+        <div class="item item2">02</div>
+        <div class="item item3">03</div>
+        <div class="item item4">04</div>
+        <div class="item item5">05</div>
+        <div class="item item6">06</div>
+        <div class="item item7">07</div>
+        <div class="item item8">08</div>
+        <div class="item item9">09</div>
+        <div class="item item10">10</div>
+        <div class="item item11">11</div>
+        <div class="item item12">12</div>
+        <div class="item item13">13</div>
+        <div class="item item14">14</div>
+        <div class="item item15">15</div>
+        <div class="item item16">16</div>
+        <div class="item item17">17</div>
+        <div class="item item18">18</div>
+        <div class="item item19">19</div>
+        <div class="item item20">20</div>
+        <div class="item item21">21</div>
+        <div class="item item22">22</div>
+        <div class="item item23">23</div>
+        <div class="item item24">24</div>
+        <div class="item item25">25</div>
+    </div>
+
+    <script>
+        const slider = document.querySelector('.items');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', function(e) {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            //window의 scroll이 아니라 div.items의 스크롤이기 때문에
+
+            /*
+            offset 메서드는 이벤트가 걸려 있는 DOM객체를 기준으로 좌표를 출력합니다. 이와 비슷한 메서드로 layer가 있습니다. 이 메서드는 현재 파이어폭스에서만 사용합니다.
+            
+            screen 메서드는 화면 출력 크기(자신의 모니터)가 기준인 절대 좌표입니다. 브라우저를 움직여도 값은 같습니다.
+
+            client 메서드는 브라우저가 기준인 좌표입니다. 현재 보이는 브라우저 화면 상에서 어느 지점에 위치하는 지를 의미하기 때문에 스크롤 해도 값은 변하지 않습니다.
+
+            page 메서드는 문서가 기준입니다. client와 비슷하지만 이 메서드는 문서 전체 크기가 기준이라 스크롤 시 값이 바뀝니다. (스크롤을 포함해서 측정합니다)*/
+        });
+
+        slider.addEventListener('mouseleave', function() {
+            isDown = false;
+            slider.classList.remove('active');
+
+        });
+
+        slider.addEventListener('mouseup', function() {
+            isDown = false;
+            slider.classList.remove('active');
+
+        });
+
+        slider.addEventListener('mousemove', function(e) {
+            if (!isDown) return; // stop 
+            e.preventDefault();
+            /*preventDefault 는 기본으로 정의된 이벤트를 작동하지 못하게 하는 메서드입니다.
+            <a>,<input>,<textarea>의 기본 동작을 막을 수 있습니다.
+
+            a태그는 적용된 href 링크값으로 페이지 이동을 해주는 기본 적인 기능을 가지고 있습니다.
+            a태그를 클릭 했을 때 preventDefault() 메서드를 실행시켜 주면 페이지 이동을 하는 기본 기능을 막는 것 입니다.
+            */
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2 //속도;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+
+</body>
+</html>
